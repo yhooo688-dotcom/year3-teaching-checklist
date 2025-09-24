@@ -1,0 +1,624 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Year 3 Teaching Checklist Widget</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Widget-optimized styles */
+        body {
+            margin: 0;
+            padding: 8px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f8fafc;
+            overflow-x: auto;
+        }
+        
+        /* Compact design for widget */
+        .widget-container {
+            max-width: 100%;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .compact-table {
+            font-size: 11px;
+            border-collapse: collapse;
+            width: 100%;
+        }
+        
+        .compact-table th,
+        .compact-table td {
+            padding: 4px 6px;
+            border: 1px solid #e2e8f0;
+            text-align: left;
+        }
+        
+        .compact-table th {
+            background: #f1f5f9;
+            font-weight: 600;
+            font-size: 10px;
+        }
+        
+        .compact-input {
+            width: 100%;
+            border: none;
+            background: transparent;
+            font-size: 10px;
+            padding: 2px;
+        }
+        
+        .compact-input:focus {
+            outline: 1px solid #3b82f6;
+            background: #eff6ff;
+        }
+        
+        .compact-checkbox {
+            width: 14px;
+            height: 14px;
+            cursor: pointer;
+        }
+        
+        .section-header {
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            color: white;
+            padding: 8px 12px;
+            font-weight: bold;
+            font-size: 14px;
+            border-radius: 6px 6px 0 0;
+        }
+        
+        .chapter-header {
+            background: #e0f2fe;
+            color: #0369a1;
+            padding: 6px 10px;
+            font-weight: 600;
+            font-size: 12px;
+            border-bottom: 2px solid #0284c7;
+        }
+        
+        .control-bar {
+            display: flex;
+            gap: 8px;
+            padding: 8px;
+            background: #f8fafc;
+            border-radius: 6px;
+            margin-bottom: 12px;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            padding: 6px 12px;
+            border-radius: 4px;
+            border: none;
+            font-size: 11px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .btn-primary { background: #3b82f6; color: white; }
+        .btn-secondary { background: #6b7280; color: white; }
+        .btn-success { background: #10b981; color: white; }
+        
+        .btn:hover { transform: translateY(-1px); opacity: 0.9; }
+        
+        .collapsible {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        
+        .progress-bar {
+            background: #e5e7eb;
+            border-radius: 10px;
+            height: 8px;
+            margin: 8px 0;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            background: linear-gradient(90deg, #10b981, #059669);
+            height: 100%;
+            transition: width 0.3s ease;
+            border-radius: 10px;
+        }
+        
+        .stats {
+            display: flex;
+            gap: 16px;
+            font-size: 11px;
+            color: #6b7280;
+            align-items: center;
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 600px) {
+            .compact-table { font-size: 10px; }
+            .compact-table th, .compact-table td { padding: 3px 4px; }
+            .compact-input { font-size: 9px; }
+        }
+        
+        /* Print styles for widget */
+        @media print {
+            body { background: white; padding: 10px; }
+            .no-print { display: none !important; }
+            .compact-table { font-size: 9px; }
+            .section-header, .chapter-header { color: black !important; background: #f0f0f0 !important; }
+        }
+    </style>
+</head>
+<body>
+    <div class="widget-container">
+        <!-- Header -->
+        <div class="section-header">
+            📚 Year 3 Teaching Checklist
+        </div>
+        
+        <!-- Control Bar -->
+        <div class="control-bar no-print">
+            <button class="btn btn-primary" onclick="window.print()">🖨️ Print</button>
+            <button class="btn btn-secondary" onclick="toggleSection('math')">📚 Math</button>
+            <button class="btn btn-secondary" onclick="toggleSection('science')">🔬 Science</button>
+            <button class="btn btn-success" onclick="calculateProgress()">📊 Progress</button>
+        </div>
+        
+        <!-- Progress Display -->
+        <div id="progress-display" class="no-print" style="padding: 0 12px;">
+            <div class="stats">
+                <span id="progress-text">Progress: 0% (0/62 completed)</span>
+            </div>
+            <div class="progress-bar">
+                <div id="progress-fill" class="progress-fill" style="width: 0%"></div>
+            </div>
+        </div>
+        
+        <!-- Mathematics Section -->
+        <div id="math-section" class="section">
+            <div class="chapter-header">📚 MATHEMATICS (5 Chapters • 37 Topics)</div>
+            <div class="collapsible">
+                
+                <!-- Chapter 1: Money -->
+                <div style="margin-bottom: 16px;">
+                    <div style="background: #fef3c7; padding: 4px 8px; font-weight: 600; font-size: 11px; color: #92400e;">
+                        Ch.1: 钱币 (Money) - Pages 2-25
+                    </div>
+                    <table class="compact-table">
+                        <thead>
+                            <tr>
+                                <th style="width: 35%;">Topic</th>
+                                <th style="width: 8%;">Page</th>
+                                <th style="width: 14%;">Date 1</th>
+                                <th style="width: 14%;">Date 2</th>
+                                <th style="width: 14%;">Date 3</th>
+                                <th style="width: 5%;">✓</th>
+                                <th style="width: 20%;">Notes</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>币值的加法 (Addition)</td>
+                                <td>3-5</td>
+                                <td><input type="date" class="compact-input"></td>
+                                <td><input type="date" class="compact-input"></td>
+                                <td><input type="date" class="compact-input"></td>
+                                <td><input type="checkbox" class="compact-checkbox"></td>
+                                <td><input type="text" class="compact-input" placeholder="Notes..."></td>
+                            </tr>
+                            <tr>
+                                <td>币值的减法 (Subtraction)</td>
+                                <td>6-8</td>
+                                <td><input type="date" class="compact-input"></td>
+                                <td><input type="date" class="compact-input"></td>
+                                <td><input type="date" class="compact-input"></td>
+                                <td><input type="checkbox" class="compact-checkbox"></td>
+                                <td><input type="text" class="compact-input" placeholder="Notes..."></td>
+                            </tr>
+                            <tr>
+                                <td>币值的加减混合运算 (Mixed Operations)</td>
+                                <td>9</td>
+                                <td><input type="date" class="compact-input"></td>
+                                <td><input type="date" class="compact-input"></td>
+                                <td><input type="date" class="compact-input"></td>
+                                <td><input type="checkbox" class="compact-checkbox"></td>
+                                <td><input type="text" class="compact-input" placeholder="Notes..."></td>
+                            </tr>
+                            <tr>
+                                <td>币值的乘法 (Multiplication)</td>
+                                <td>10-11</td>
+                                <td><input type="date" class="compact-input"></td>
+                                <td><input type="date" class="compact-input"></td>
+                                <td><input type="date" class="compact-input"></td>
+                                <td><input type="checkbox" class="compact-checkbox"></td>
+                                <td><input type="text" class="compact-input" placeholder="Notes..."></td>
+                            </tr>
+                            <tr>
+                                <td>币值的除法 (Division)</td>
+                                <td>12-13</td>
+                                <td><input type="date" class="compact-input"></td>
+                                <td><input type="date" class="compact-input"></td>
+                                <td><input type="date" class="compact-input"></td>
+                                <td><input type="checkbox" class="compact-checkbox"></td>
+                                <td><input type="text" class="compact-input" placeholder="Notes..."></td>
+                            </tr>
+                            <tr>
+                                <td>各国的钱币 (World Currencies)</td>
+                                <td>15-17</td>
+                                <td><input type="date" class="compact-input"></td>
+                                <td><input type="date" class="compact-input"></td>
+                                <td><input type="date" class="compact-input"></td>
+                                <td><input type="checkbox" class="compact-checkbox"></td>
+                                <td><input type="text" class="compact-input" placeholder="Notes..."></td>
+                            </tr>
+                            <tr>
+                                <td>钱财的管理 (Money Management)</td>
+                                <td>18-19</td>
+                                <td><input type="date" class="compact-input"></td>
+                                <td><input type="date" class="compact-input"></td>
+                                <td><input type="date" class="compact-input"></td>
+                                <td><input type="checkbox" class="compact-checkbox"></td>
+                                <td><input type="text" class="compact-input" placeholder="Notes..."></td>
+                            </tr>
+                            <tr>
+                                <td>解决问题 (Problem Solving)</td>
+                                <td>21-24</td>
+                                <td><input type="date" class="compact-input"></td>
+                                <td><input type="date" class="compact-input"></td>
+                                <td><input type="date" class="compact-input"></td>
+                                <td><input type="checkbox" class="compact-checkbox"></td>
+                                <td><input type="text" class="compact-input" placeholder="Notes..."></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <!-- Chapter 5: Time (Sample - you can expand with more chapters) -->
+                <div style="margin-bottom: 16px;">
+                    <div style="background: #fef3c7; padding: 4px 8px; font-weight: 600; font-size: 11px; color: #92400e;">
+                        Ch.5: 时间与时刻 (Time) - Pages 26-53
+                    </div>
+                    <table class="compact-table">
+                        <thead>
+                            <tr>
+                                <th style="width: 35%;">Topic</th>
+                                <th style="width: 8%;">Page</th>
+                                <th style="width: 14%;">Date 1</th>
+                                <th style="width: 14%;">Date 2</th>
+                                <th style="width: 14%;">Date 3</th>
+                                <th style="width: 5%;">✓</th>
+                                <th style="width: 20%;">Notes</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>时间表 (Timetables)</td>
+                                <td>27</td>
+                                <td><input type="date" class="compact-input"></td>
+                                <td><input type="date" class="compact-input"></td>
+                                <td><input type="date" class="compact-input"></td>
+                                <td><input type="checkbox" class="compact-checkbox"></td>
+                                <td><input type="text" class="compact-input" placeholder="Notes..."></td>
+                            </tr>
+                            <tr>
+                                <td>时间单位的关系 (Time Units)</td>
+                                <td>28</td>
+                                <td><input type="date" class="compact-input"></td>
+                                <td><input type="date" class="compact-input"></td>
+                                <td><input type="date" class="compact-input"></td>
+                                <td><input type="checkbox" class="compact-checkbox"></td>
+                                <td><input type="text" class="compact-input" placeholder="Notes..."></td>
+                            </tr>
+                            <tr>
+                                <td>时间单位的换算 (Time Conversion)</td>
+                                <td>29</td>
+                                <td><input type="date" class="compact-input"></td>
+                                <td><input type="date" class="compact-input"></td>
+                                <td><input type="date" class="compact-input"></td>
+                                <td><input type="checkbox" class="compact-checkbox"></td>
+                                <td><input type="text" class="compact-input" placeholder="Notes..."></td>
+                            </tr>
+                            <tr>
+                                <td>年历、月历、日历 (Calendars)</td>
+                                <td>30-31</td>
+                                <td><input type="date" class="compact-input"></td>
+                                <td><input type="date" class="compact-input"></td>
+                                <td><input type="date" class="compact-input"></td>
+                                <td><input type="checkbox" class="compact-checkbox"></td>
+                                <td><input type="text" class="compact-input" placeholder="Notes..."></td>
+                            </tr>
+                            <tr>
+                                <td>时间的加法 (Addition of Time)</td>
+                                <td>32-35</td>
+                                <td><input type="date" class="compact-input"></td>
+                                <td><input type="date" class="compact-input"></td>
+                                <td><input type="date" class="compact-input"></td>
+                                <td><input type="checkbox" class="compact-checkbox"></td>
+                                <td><input type="text" class="compact-input" placeholder="Notes..."></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Science Section -->
+        <div id="science-section" class="section">
+            <div class="chapter-header">🔬 SCIENCE (5 Topics • 25 Subtopics)</div>
+            <div class="collapsible">
+                
+                <!-- Topic 6: Measurement -->
+                <div style="margin-bottom: 16px;">
+                    <div style="background: #dcfce7; padding: 4px 8px; font-weight: 600; font-size: 11px; color: #166534;">
+                        Topic 6: 测量 (Measurement) - Pages 80-97
+                    </div>
+                    <table class="compact-table">
+                        <thead>
+                            <tr>
+                                <th style="width: 35%;">Subtopic</th>
+                                <th style="width: 8%;">Page</th>
+                                <th style="width: 14%;">Date 1</th>
+                                <th style="width: 14%;">Date 2</th>
+                                <th style="width: 14%;">Date 3</th>
+                                <th style="width: 5%;">✓</th>
+                                <th style="width: 20%;">Notes</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr style="background: #f0f9ff;">
+                                <td colspan="7" style="font-weight: 600; color: #0369a1; padding: 3px 6px;">认识面积 (Understanding Area)</td>
+                            </tr>
+                            <tr>
+                                <td style="padding-left: 12px;">面积的概念与单位 (Area Concepts)</td>
+                                <td>81</td>
+                                <td><input type="date" class="compact-input"></td>
+                                <td><input type="date" class="compact-input"></td>
+                                <td><input type="date" class="compact-input"></td>
+                                <td><input type="checkbox" class="compact-checkbox"></td>
+                                <td><input type="text" class="compact-input" placeholder="Notes..."></td>
+                            </tr>
+                            <tr>
+                                <td style="padding-left: 12px;">用方格纸测量面积 (Grid Paper)</td>
+                                <td>82</td>
+                                <td><input type="date" class="compact-input"></td>
+                                <td><input type="date" class="compact-input"></td>
+                                <td><input type="date" class="compact-input"></td>
+                                <td><input type="checkbox" class="compact-checkbox"></td>
+                                <td><input type="text" class="compact-input" placeholder="Notes..."></td>
+                            </tr>
+                            <tr>
+                                <td style="padding-left: 12px;">估计不规则物体面积 (Irregular Areas)</td>
+                                <td>83</td>
+                                <td><input type="date" class="compact-input"></td>
+                                <td><input type="date" class="compact-input"></td>
+                                <td><input type="date" class="compact-input"></td>
+                                <td><input type="checkbox" class="compact-checkbox"></td>
+                                <td><input type="text" class="compact-input" placeholder="Notes..."></td>
+                            </tr>
+                            <tr style="background: #f0f9ff;">
+                                <td colspan="7" style="font-weight: 600; color: #0369a1; padding: 3px 6px;">认识体积 (Understanding Volume)</td>
+                            </tr>
+                            <tr>
+                                <td style="padding-left: 12px;">体积概念与单位 (Volume Concepts)</td>
+                                <td>84</td>
+                                <td><input type="date" class="compact-input"></td>
+                                <td><input type="date" class="compact-input"></td>
+                                <td><input type="date" class="compact-input"></td>
+                                <td><input type="checkbox" class="compact-checkbox"></td>
+                                <td><input type="text" class="compact-input" placeholder="Notes..."></td>
+                            </tr>
+                            <tr>
+                                <td style="padding-left: 12px;">用正方体测量体积 (Unit Cubes)</td>
+                                <td>85</td>
+                                <td><input type="date" class="compact-input"></td>
+                                <td><input type="date" class="compact-input"></td>
+                                <td><input type="date" class="compact-input"></td>
+                                <td><input type="checkbox" class="compact-checkbox"></td>
+                                <td><input type="text" class="compact-input" placeholder="Notes..."></td>
+                            </tr>
+                            <tr>
+                                <td style="padding-left: 12px;">液体体积单位 (Liquid Volume Units)</td>
+                                <td>86</td>
+                                <td><input type="date" class="compact-input"></td>
+                                <td><input type="date" class="compact-input"></td>
+                                <td><input type="date" class="compact-input"></td>
+                                <td><input type="checkbox" class="compact-checkbox"></td>
+                                <td><input type="text" class="compact-input" placeholder="Notes..."></td>
+                            </tr>
+                            <tr>
+                                <td style="padding-left: 12px;">测量液体体积工具 (Measuring Tools)</td>
+                                <td>87-89</td>
+                                <td><input type="date" class="compact-input"></td>
+                                <td><input type="date" class="compact-input"></td>
+                                <td><input type="date" class="compact-input"></td>
+                                <td><input type="checkbox" class="compact-checkbox"></td>
+                                <td><input type="text" class="compact-input" placeholder="Notes..."></td>
+                            </tr>
+                            <tr>
+                                <td style="padding-left: 12px;">排水法测量固体体积 (Displacement)</td>
+                                <td>90-91</td>
+                                <td><input type="date" class="compact-input"></td>
+                                <td><input type="date" class="compact-input"></td>
+                                <td><input type="date" class="compact-input"></td>
+                                <td><input type="checkbox" class="compact-checkbox"></td>
+                                <td><input type="text" class="compact-input" placeholder="Notes..."></td>
+                            </tr>
+                            <tr>
+                                <td style="padding-left: 12px;">测量的重要性 (Importance)</td>
+                                <td>92</td>
+                                <td><input type="date" class="compact-input"></td>
+                                <td><input type="date" class="compact-input"></td>
+                                <td><input type="date" class="compact-input"></td>
+                                <td><input type="checkbox" class="compact-checkbox"></td>
+                                <td><input type="text" class="compact-input" placeholder="Notes..."></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <!-- Topic 7: Density (Sample) -->
+                <div style="margin-bottom: 16px;">
+                    <div style="background: #dcfce7; padding: 4px 8px; font-weight: 600; font-size: 11px; color: #166534;">
+                        Topic 7: 密度 (Density) - Pages 96-105
+                    </div>
+                    <table class="compact-table">
+                        <thead>
+                            <tr>
+                                <th style="width: 35%;">Subtopic</th>
+                                <th style="width: 8%;">Page</th>
+                                <th style="width: 14%;">Date 1</th>
+                                <th style="width: 14%;">Date 2</th>
+                                <th style="width: 14%;">Date 3</th>
+                                <th style="width: 5%;">✓</th>
+                                <th style="width: 20%;">Notes</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>观察沉浮现象 (Sinking & Floating)</td>
+                                <td>97</td>
+                                <td><input type="date" class="compact-input"></td>
+                                <td><input type="date" class="compact-input"></td>
+                                <td><input type="date" class="compact-input"></td>
+                                <td><input type="checkbox" class="compact-checkbox"></td>
+                                <td><input type="text" class="compact-input" placeholder="Notes..."></td>
+                            </tr>
+                            <tr>
+                                <td>密度概念理解 (Density Concept)</td>
+                                <td>99</td>
+                                <td><input type="date" class="compact-input"></td>
+                                <td><input type="date" class="compact-input"></td>
+                                <td><input type="date" class="compact-input"></td>
+                                <td><input type="checkbox" class="compact-checkbox"></td>
+                                <td><input type="text" class="compact-input" placeholder="Notes..."></td>
+                            </tr>
+                            <tr>
+                                <td>改变物体沉浮方法 (Changing Buoyancy)</td>
+                                <td>100-101</td>
+                                <td><input type="date" class="compact-input"></td>
+                                <td><input type="date" class="compact-input"></td>
+                                <td><input type="date" class="compact-input"></td>
+                                <td><input type="checkbox" class="compact-checkbox"></td>
+                                <td><input type="text" class="compact-input" placeholder="Notes..."></td>
+                            </tr>
+                            <tr>
+                                <td>彩色高塔制作 (Colored Tower)</td>
+                                <td>102</td>
+                                <td><input type="date" class="compact-input"></td>
+                                <td><input type="date" class="compact-input"></td>
+                                <td><input type="date" class="compact-input"></td>
+                                <td><input type="checkbox" class="compact-checkbox"></td>
+                                <td><input type="text" class="compact-input" placeholder="Notes..."></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Footer -->
+        <div style="text-align: center; padding: 8px; background: #f8fafc; font-size: 10px; color: #6b7280; border-radius: 0 0 8px 8px;">
+            <strong>Year 3 Teaching Checklist Widget</strong> | Auto-save enabled | Print optimized<br>
+            📚 Math: 37 topics | 🔬 Science: 25 topics | Use Date 1,2,3 for phases/classes/sessions
+        </div>
+    </div>
+
+    <script>
+        // Widget functionality
+        function toggleSection(section) {
+            const element = document.getElementById(section + '-section');
+            const isVisible = element.style.display !== 'none';
+            element.style.display = isVisible ? 'none' : 'block';
+            
+            // Update button text
+            const btn = event.target;
+            if (isVisible) {
+                btn.textContent = btn.textContent.replace('📚', '👁️').replace('🔬', '👁️');
+                btn.classList.remove('btn-secondary');
+                btn.classList.add('btn-primary');
+            } else {
+                btn.textContent = btn.textContent.replace('👁️', section === 'math' ? '📚' : '🔬');
+                btn.classList.remove('btn-primary');
+                btn.classList.add('btn-secondary');
+            }
+        }
+        
+        function calculateProgress() {
+            const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+            const completed = document.querySelectorAll('input[type="checkbox"]:checked').length;
+            const total = checkboxes.length;
+            const percentage = Math.round((completed / total) * 100);
+            
+            document.getElementById('progress-text').textContent = 
+                `Progress: ${percentage}% (${completed}/${total} completed)`;
+            document.getElementById('progress-fill').style.width = percentage + '%';
+            
+            // Show completion message
+            if (percentage === 100) {
+                alert('🎉 Congratulations! You have completed all topics!');
+            }
+        }
+        
+        // Auto-save functionality
+        function saveData() {
+            const inputs = document.querySelectorAll('input');
+            const data = {};
+            inputs.forEach((input, index) => {
+                if (input.type === 'checkbox') {
+                    data[index] = input.checked;
+                } else {
+                    data[index] = input.value;
+                }
+            });
+            localStorage.setItem('widgetChecklistData', JSON.stringify(data));
+        }
+        
+        function loadData() {
+            const data = localStorage.getItem('widgetChecklistData');
+            if (data) {
+                const parsedData = JSON.parse(data);
+                const inputs = document.querySelectorAll('input');
+                inputs.forEach((input, index) => {
+                    if (parsedData[index] !== undefined) {
+                        if (input.type === 'checkbox') {
+                            input.checked = parsedData[index];
+                        } else {
+                            input.value = parsedData[index];
+                        }
+                    }
+                });
+            }
+        }
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            loadData();
+            calculateProgress();
+        });
+        
+        // Auto-save on changes
+        document.addEventListener('change', function() {
+            saveData();
+            calculateProgress();
+        });
+        
+        document.addEventListener('input', saveData);
+        
+        // Responsive height adjustment for iframe
+        function adjustHeight() {
+            const height = document.body.scrollHeight + 20;
+            if (window.parent && window.parent !== window) {
+                window.parent.postMessage({height: height}, '*');
+            }
+        }
+        
+        // Adjust height when content changes
+        window.addEventListener('load', adjustHeight);
+        window.addEventListener('resize', adjustHeight);
+        
+        // Update progress on page load
+        setTimeout(calculateProgress, 500);
+    </script>
+</body>
+</html>
